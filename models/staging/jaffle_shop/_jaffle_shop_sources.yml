@@ -2,6 +2,7 @@ sources:
   - name: jaffle_shop
     database: raw
     schema: jaffle_shop
+    description: database with jaffle shop orders and customers
     config: 
       # changed to config in v1.9
       freshness: # default freshness
@@ -11,16 +12,24 @@ sources:
       loaded_at_field: _etl_loaded_at
     tables:
       - name: customers
+        description: one row per customer
         freshness: null
         columns:
           - name: id
+            description: Primary Key for Customers
             data_tests:
               - unique
               - not_null
+          - name: first_name
+            data_tests:
+              - dbt_utils.not_empty_string
+
       - name: orders
+        description: one row per order
         freshness: null
         columns:
           - name: id
+            description: primary key for orders
             data_tests:
               - unique
               - not_null
@@ -38,6 +47,12 @@ sources:
               - relationships:
                   field: id
                   to: source('jaffle_shop', 'customers')
+      - name: order_items
+        columns:
+          - name: product_price
+            data_tests:
+              - greater_than_zero
+
                   
         
         

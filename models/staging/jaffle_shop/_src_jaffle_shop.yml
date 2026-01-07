@@ -6,3 +6,4 @@ sources:
     tables:
       - name: customers
       - name: orders
+        description: '{{doc("order_status")}}'

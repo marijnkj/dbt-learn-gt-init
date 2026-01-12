@@ -8,14 +8,15 @@ orders AS (
     SELECT
         *
     FROM
-        {{ ref('stg_jaffle_shop__orders') }}
+        {{ ref('fct_orders') }}
 ),
 customer_orders AS (
     SELECT
         customer_id,
         MIN(order_date) AS first_order_date,
         MAX(order_date) AS most_recent_order_date,
-        COUNT(order_id) AS number_of_orders
+        COUNT(order_id) AS number_of_orders,
+        SUM(amount) AS lifetime_value
     FROM
         orders
     GROUP BY
@@ -31,7 +32,8 @@ FINAL AS (
         COALESCE(
             customer_orders.number_of_orders,
             0
-        ) AS number_of_orders
+        ) AS number_of_orders,
+        customer_orders.lifetime_value
     FROM
         customers
         LEFT JOIN customer_orders USING (customer_id)

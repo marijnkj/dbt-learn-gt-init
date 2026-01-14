@@ -1,0 +1,31 @@
+macros:
+  - name: cents_to_dollars
+    description: "Convert an amount in cents to dollars, with a specified number of decimal places (default is 2)."
+    arguments:
+      - name: column_name
+        description: "The name of the column containing the amount in cents."
+      - name: decimals
+        description: "The number of decimal places to round to (default is 2)."
+        default: 2
+    returns: "A SQL expression that converts the amount in cents to dollars."
+    examples:
+      - description: "Convert the 'amount' column from cents to dollars with default 2 decimal places."
+        code: "{{ cents_to_dollars('amount') }}"
+      - description: "Convert the 'total_cents' column from cents to dollars with 4 decimal places."
+        code: "{{ cents_to_dollars('total_cents', decimals=4) }}"
+
+  - name: grant_select
+    description: "Grants SELECT privileges on all tables in a specified schema to a specified role within a specified database."
+    arguments:
+      - name: schema 
+        description: "The schema on which to grant SELECT privileges. Defaults to the target schema."
+      - name: role
+        description: "The role to which SELECT privileges will be granted. Defaults to the target role"
+      - name: database
+        description: "The database containing the schema. Defaults to the target database."
+    returns: "A SQL command that grants SELECT privileges on all tables in the specified schema to the specified role."
+    examples:
+      - description: "Grant SELECT privileges on the target schema to the target role in the target database."
+        code: "{{ grant_select() }}"
+      - description: "Grant SELECT privileges on the 'sales' schema to the 'analyst_role' in the 'analytics_db' database."
+        code: "{{ grant_select(schema='sales', role='analyst_role', database='analytics_db') }}"
